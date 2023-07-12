@@ -67,6 +67,15 @@ joint_goal[3] = -1.5794
 joint_goal[4] = -1.5794
 joint_goal[5] = 0
 
+# The go command can be called with joint values, poses, or without any
+# parameters if you have already set the pose or joint target for the group
+move_group.go(joint_goal, wait=True)
+#Calling ``stop()`` ensures that there is no residual movement
+move_group.stop()
+# It is always good to clear your targets after planning with poses.
+# Note: there is no equivalent function for clear_joint_value_targets().
+move_group.clear_pose_targets()
+
 
 go = True
 i = 0
@@ -77,11 +86,30 @@ while go == True:
     print(robot.get_current_state())
     print("")
 
-    scale = 0.0001
+    scale = 0.01
 
     x_axis = float(x_coords[i])
     y_axis = float(y_coords[i])
     z_axis = float(z_coords[i])
+
+     # Initialize the moveit_commander module
+    moveit_commander.roscpp_initialize(sys.argv)
+
+    # Initialize the ROS node
+    rospy.init_node('ur5_moveit_demo', anonymous=True)
+
+    # Create a RobotCommander object
+    robot = moveit_commander.RobotCommander()
+
+    # Create a PlanningSceneInterface object
+    scene = moveit_commander.PlanningSceneInterface()
+
+    # Create a MoveGroupCommander object for the arm
+    group_name = "manipulator"
+    move_group = moveit_commander.MoveGroupCommander(group_name)
+
+    # Set the reference frame for motion planning
+    move_group.set_pose_reference_frame('base_link')
 
     pose_target = Pose()
     pose_target.position.x = x_axis * scale
