@@ -14,9 +14,9 @@ import time
 
 # DEFAULT SCALE IN MILIMITERS
 OFFSET = 3 #mm
-RESOLUTION = 50 #Quanto maior o numero, menor a resolucao (1 ponto/RESOLUTION)
+RESOLUTION = 1 #Quanto maior o numero, menor a resolucao (1 ponto/RESOLUTION)
 
-pdf_path = 'path01.pdf'
+pdf_path = 'path02.pdf'
 
 def get_pdf_size(pdf_path):
     with open(pdf_path, 'rb') as file:
