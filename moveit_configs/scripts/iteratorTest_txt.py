@@ -23,7 +23,7 @@ import time
 dots_3d = np.loadtxt('pathDots.txt')
 x_coords, y_coords, z_coords = zip(*[(dot[0], dot[1], dot[2]) for dot in dots_3d])
 
-node_name = "teste_moveit"
+node_name = "ur5_moveit_config"
 
 moveit_commander.roscpp_initialize(sys.argv)
 rospy.init_node(node_name, anonymous=True)
@@ -31,7 +31,7 @@ rospy.init_node(node_name, anonymous=True)
 robot = moveit_commander.RobotCommander()
 scene = moveit_commander.PlanningSceneInterface()
 
-group_name = "ur5_arm"
+group_name = "manipulator"
 move_group = moveit_commander.MoveGroupCommander(group_name)
 
 display_trajectory_publisher = rospy.Publisher(
@@ -53,6 +53,26 @@ print("============ End effector link: %s" % eef_link)
 group_names = robot.get_group_names()
 print("============ Available Planning Groups:", robot.get_group_names())
 
+
+print("============ Indo a posição home")
+# We get the joint values from the group and change some of the values:
+joint_goal = move_group.get_current_joint_values()
+joint_goal[0] = 0
+joint_goal[1] = -1.5447
+joint_goal[2] = 1.5794
+joint_goal[3] = -1.5794
+joint_goal[4] = -1.5794
+joint_goal[5] = 0
+
+# The go command can be called with joint values, poses, or without any
+# parameters if you have already set the pose or joint target for the group
+move_group.go(joint_goal, wait=True)
+#Calling ``stop()`` ensures that there is no residual movement
+move_group.stop()
+# It is always good to clear your targets after planning with poses.
+# Note: there is no equivalent function for clear_joint_value_targets().
+move_group.clear_pose_targets()
+
 go = True
 i = 0
 while go == True:
@@ -62,16 +82,6 @@ while go == True:
     print(robot.get_current_state())
     print("")
 
-    # pose_goal = geometry_msgs.msg.Pose()
-    # pose_goal.orientation.w = 1.0
-    # pose_goal.position.x = 0.4
-    # pose_goal.position.y = 0.1
-    # pose_goal.position.z = 0.4
-
-    # move_group.set_pose_target(pose_goal)
-
-    # `go()` returns a boolean indicating whether the planning and execution was successful.
-    # success = move_group.go(wait=True)
     # Calling `stop()` ensures that there is no residual movement
     move_group.stop()
     # It is always good to clear your targets after planning with poses.
@@ -80,7 +90,7 @@ while go == True:
 
     waypoints = []
 
-    scale = 1.0
+    scale = 0.0001
 
     wpose = move_group.get_current_pose().pose
 
@@ -88,10 +98,11 @@ while go == True:
     y_axis = float(y_coords[i])
     z_axis = float(z_coords[i])
 
+    wpose.position.x += scale * x_axis  # Move forward/backwards in (x)
+    wpose.position.y += scale * y_axis # Move sideways (y)
+    wpose.position.z += scale * z_axis # Move up/down (z)
     try:
-        wpose.position.x -= scale * x_axis  # Move forward/backwards in (x)
-        wpose.position.y += scale * y_axis # Move sideways (y)
-        wpose.position.z -= scale * z_axis # Move up/down (z)
+
         waypoints.append(copy.deepcopy(wpose)) # Send the values of the axis
 
         # We want the Cartesian path to be interpolated at a resolution of 1 cm
@@ -118,10 +129,10 @@ while go == True:
         go = False
     else:
         if i<len(dots_3d):
-            i = i+1
             print("Movimento " + str(i))
-            print("Movimento executado com sucesso. Aguardando 5s")
-            time.sleep(5)
+            print("Movimento executado com sucesso. Aguardando 2s")
+            time.sleep(2)
+            i = i+1
         else:
             print("Movimento executado com sucesso. Finalizando.")
             go = False    

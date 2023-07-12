@@ -14,6 +14,8 @@ import time
 
 # DEFAULT SCALE IN MILIMITERS
 OFFSET = 3 #mm
+RESOLUTION = 50 #Quanto maior o numero, menor a resolucao (1 ponto/RESOLUTION)
+
 pdf_path = 'path01.pdf'
 
 def get_pdf_size(pdf_path):
@@ -62,6 +64,30 @@ def is_close(dot, existing_dots, min_distance):
             return True
     return False
 
+def calculateMoves(dots):
+    moves = []
+    x_distance = []
+    y_distance = []
+    z_distance = []
+
+
+    x_coords, y_coords, z_coords = zip(*[(dot[0], dot[1], dot[2]) for dot in dots_3d])
+
+
+    x_distance.append(x_coords[0])
+    y_distance.append(y_coords[0])
+    z_distance.append(z_coords[0])
+
+    for i in range(1,len(dots)):
+        x_distance.append(x_coords[i] - x_coords[i-1] )
+        y_distance.append(y_coords[i] - y_coords[i-1] )
+        z_distance.append(z_coords[i] - z_coords[i-1] )
+
+    for i in range(len(x_distance)):
+        moves.append((x_distance[i], y_distance[i], z_distance[i]))    
+
+    return moves
+
 
 # Convert PDF curves to dots
 
@@ -69,7 +95,7 @@ width_mm, height_mm = get_pdf_size(pdf_path)
 print(f"Width: {round(width_mm,1)} mm")
 print(f"Height: {round(height_mm,1)} mm")
 
-dots = pdf_curves_to_dots(pdf_path, min_distance=5)
+dots = pdf_curves_to_dots(pdf_path, min_distance=RESOLUTION)
 
 print("Number of dots: " + str(len(dots)))
 
@@ -94,35 +120,45 @@ scaled_dots = [(dot[0] * scale_factor_x, width_mm - dot[1] * scale_factor_y) for
 # Convert the image to a numpy array
 img_array = np.array(image)
 
+
+# Transform dots into a 3D array with constant offset
+dots_3d = [(x, y, OFFSET) for x, y in scaled_dots]
+
+moves = calculateMoves(dots_3d)
+
+np.savetxt('pathDots.txt', dots_3d)
+np.savetxt('moves.txt', moves)
+
+
+
+
+## PLOT 2D
 # Display the image with dots
 plt.imshow(img_array, cmap='gray', extent=(0, width_mm, 0, height_mm))
 plt.plot(*zip(*scaled_dots), '.', color='red', markersize=1)
 plt.show()
 
-# Transform dots into a 3D array with constant offset
-dots_3d = [(x, y, OFFSET) for x, y in scaled_dots]
+
 
 # Print the transformed dots
 # for dot in dots_3d:
 #     print(dot)
 
-
+## PLOT 3D
 fig = plt.figure()
 ax = fig.add_subplot(111, projection='3d')
-
 # Extract x, y, and z coordinates from the dots
 x_coords, y_coords, z_coords = zip(*[(dot[0], dot[1], dot[2]) for dot in dots_3d])
-
 # Plot the dots in 3D space
 ax.scatter(x_coords, y_coords, z_coords, c='r', marker='o')
-
 # Set labels and title for the plot
 ax.set_xlabel('X')
 ax.set_ylabel('Y')
 ax.set_zlabel('Z')
 ax.set_title('Dots in 3D')
-
 # Show the 3D plot
 plt.show()
 
-np.savetxt('pathDots.txt', dots_3d)
+
+
+
