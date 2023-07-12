@@ -119,6 +119,7 @@ while go == True:
     else:
         if i<len(dots_3d):
             i = i+1
+            print("Movimento " + str(i))
             print("Movimento executado com sucesso. Aguardando 5s")
             time.sleep(5)
         else:
