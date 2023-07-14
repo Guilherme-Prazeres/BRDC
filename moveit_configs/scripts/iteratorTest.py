@@ -3,14 +3,14 @@
 from __future__ import print_function
 #from six.moves import input
 
-import sys
-import copy
-import rospy
-import moveit_commander
-import moveit_msgs.msg
-import geometry_msgs.msg
-from std_msgs.msg import String
-from moveit_commander.conversions import pose_to_list
+# import sys
+# import copy
+# import rospy
+# import moveit_commander
+# import moveit_msgs.msg
+# import geometry_msgs.msg
+# from std_msgs.msg import String
+# from moveit_commander.conversions import pose_to_list
 import cv2
 import numpy as np
 from pdf2image import convert_from_path

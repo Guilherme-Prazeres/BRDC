@@ -14,9 +14,11 @@ import time
 
 # DEFAULT SCALE IN MILIMITERS
 OFFSET = 3 #mm
-RESOLUTION = 1 #Quanto maior o numero, menor a resolucao (1 ponto/RESOLUTION)
+OFFSETX = 0
+OFFSETY = 0
+RESOLUTION = 20 #Quanto maior o numero, menor a resolucao (1 ponto/RESOLUTION)
 
-pdf_path = 'path02.pdf'
+pdf_path = 'path06.pdf'
 
 def get_pdf_size(pdf_path):
     with open(pdf_path, 'rb') as file:
@@ -122,7 +124,7 @@ img_array = np.array(image)
 
 
 # Transform dots into a 3D array with constant offset
-dots_3d = [(x, y, OFFSET) for x, y in scaled_dots]
+dots_3d = [(x+OFFSETX, y+OFFSETY, OFFSET) for x, y in scaled_dots]
 
 moves = calculateMoves(dots_3d)
 

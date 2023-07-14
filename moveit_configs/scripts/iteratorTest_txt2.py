@@ -86,30 +86,13 @@ while go == True:
     print(robot.get_current_state())
     print("")
 
-    scale = 0.01
+    scale = 0.0001
 
     x_axis = float(x_coords[i])
     y_axis = float(y_coords[i])
     z_axis = float(z_coords[i])
 
-     # Initialize the moveit_commander module
-    moveit_commander.roscpp_initialize(sys.argv)
-
-    # Initialize the ROS node
-    rospy.init_node('ur5_moveit_demo', anonymous=True)
-
-    # Create a RobotCommander object
-    robot = moveit_commander.RobotCommander()
-
-    # Create a PlanningSceneInterface object
-    scene = moveit_commander.PlanningSceneInterface()
-
-    # Create a MoveGroupCommander object for the arm
-    group_name = "manipulator"
-    move_group = moveit_commander.MoveGroupCommander(group_name)
-
-    # Set the reference frame for motion planning
-    move_group.set_pose_reference_frame('base_link')
+    
 
     pose_target = Pose()
     pose_target.position.x = x_axis * scale
@@ -138,13 +121,12 @@ while go == True:
         print("Erro ao realizar movimento")
         go = False
     else:
-        if i<len(dots_3d):
-            print("Movimento " + str(i))
-            print("Movimento executado com sucesso. Aguardando 2s")
-            time.sleep(2)
+        print("Movimento " + str(i) + " executado com sucesso")
+        if i<len(dots_3d)-1:
+            print("Calculando próximo movimento...")
             i = i+1
         else:
-            print("Movimento executado com sucesso. Finalizando.")
+            print("Finalizando.")
             go = False    
 
 
