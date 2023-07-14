@@ -1,0 +1,8 @@
+prefix=/home/guilherme/ur_ws/devel
+
+Name: robo_braco_moveit
+Description: Description of robo_braco_moveit
+Version: 0.3.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

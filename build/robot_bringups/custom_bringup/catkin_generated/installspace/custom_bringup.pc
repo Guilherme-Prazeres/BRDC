@@ -1,0 +1,8 @@
+prefix=/home/guilherme/ur_ws/install
+
+Name: custom_bringup
+Description: Description of custom_bringup
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

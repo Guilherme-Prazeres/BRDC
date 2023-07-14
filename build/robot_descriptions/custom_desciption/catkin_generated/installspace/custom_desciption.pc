@@ -1,0 +1,8 @@
+prefix=/home/guilherme/ur_ws/install
+
+Name: custom_desciption
+Description: Description of custom_desciption
+Version: 0.0.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

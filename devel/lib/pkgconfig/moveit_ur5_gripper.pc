@@ -1,0 +1,8 @@
+prefix=/home/guilherme/ur_ws/devel
+
+Name: moveit_ur5_gripper
+Description: Description of moveit_ur5_gripper
+Version: 0.3.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

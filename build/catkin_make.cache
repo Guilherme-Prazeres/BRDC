@@ -1,0 +1,2 @@
+moveit_configs:robo_braco_moveit:universal_robot/universal_robots:universal_robot/ur10_moveit_config:universal_robot/ur10e_moveit_config:universal_robot/ur16e_moveit_config:universal_robot/ur3_moveit_config:universal_robot/ur3e_moveit_config:universal_robot/ur5_moveit_config:universal_robot/ur5e_moveit_config:universal_robot/ur_description:universal_robot/ur_gazebo:universal_robot/ur_kinematics
+-DCATKIN_DEVEL_PREFIX=/home/guilherme/ur_ws/devel -DCMAKE_INSTALL_PREFIX=/home/guilherme/ur_ws/install -G Unix Makefiles

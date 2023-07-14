@@ -1,0 +1,8 @@
+prefix=/home/guilherme/ur_ws/devel
+
+Name: ur5_robotiq_moveit_config
+Description: Description of ur5_robotiq_moveit_config
+Version: 0.3.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 

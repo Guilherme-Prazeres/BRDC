@@ -1,0 +1,8 @@
+prefix=/home/guilherme/ur_ws/install
+
+Name: moveit_configs
+Description: Description of moveit_configs
+Version: 0.3.0
+Cflags: 
+Libs: -L${prefix}/lib 
+Requires: 
